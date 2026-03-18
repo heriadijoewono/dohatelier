@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>doh.atelier — Architecture · Advisory · Visualization</title>
+<meta name="description" content="Layanan arsitektur untuk profesional Indonesia di Qatar & GCC yang ingin membangun rumah impian di Indonesia. Dipimpin arsitek senior 25+ tahun pengalaman.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --white: #ffffff;
+  --off-white: #f7f6f4;
+  --light: #edecE8;
+  --ink: #111111;
+  --ink-mid: #444444;
+  --ink-light: #666666;
+  --ink-muted: #999999;
+  --border: rgba(0,0,0,0.08);
+  --accent: #c4512a;
+  --accent-hover: #a3401f;
+  --accent-light: #fdf0ec;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Outfit', -apple-system, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--white);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--accent); color: var(--white); }
+
+/* ========== NAV ========== */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s ease;
+}
+.nav.scrolled {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 var(--border);
+  padding: 1rem 3rem;
+}
+.nav-logo {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
+.nav-links a {
+  font-size: 0.78rem;
+  color: var(--ink-light);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 400;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--ink);
+  transition: width 0.3s;
+}
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--ink) !important;
+  color: var(--white) !important;
+  padding: 0.5rem 1.3rem !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.08em !important;
+  transition: background 0.3s !important;
+}
+.nav-cta::after { display: none !important; }
+.nav-cta:hover { background: var(--accent) !important; }
+
+.lang-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+}
+.lang-toggle button {
+  background: transparent;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  font-family: var(--sans);
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  color: var(--ink-muted);
+  transition: all 0.3s;
+}
+.lang-toggle button.active {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--ink);
+  transition: all 0.3s;
+}
+
+/* ========== HERO ========== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 3rem 6rem;
+  position: relative;
+}
+
+.hero-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 4rem;
+  align-items: end;
+  padding-top: 8rem;
+}
+
+.hero-left {}
+
+.hero-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 400;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.2s;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(3.2rem, 6.5vw, 5.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 0;
+  font-weight: 400;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.3s;
+}
+
+.hero h1 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.hero-right {
+  padding-bottom: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.5s;
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--ink-light);
+  line-height: 1.85;
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+  max-width: 400px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--accent);
+  color: var(--white);
+  padding: 0.85rem 1.8rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: var(--sans);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--ink);
+  padding: 0.85rem 1.8rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: var(--sans);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  transition: all 0.3s;
+}
+.btn-secondary:hover { background: var(--ink); color: var(--white); }
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+}
+.stat-item {}
+.stat-item h3 {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  color: var(--ink);
+  line-height: 1;
+  font-weight: 400;
+}
+.stat-item p {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 0.2rem;
+  font-weight: 400;
+}
+
+/* ========== DIVIDER LINE ========== */
+.divider {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+.divider-line {
+  height: 1px;
+  background: var(--border);
+  width: 100%;
+}
+
+/* ========== SECTION DEFAULTS ========== */
+section { padding: 6rem 3rem; }
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+.section-desc {
+  font-size: 1rem;
+  color: var(--ink-light);
+  max-width: 480px;
+  line-height: 1.85;
+  margin-bottom: 3.5rem;
+  font-weight: 300;
+}
+
+/* ========== PROBLEM ========== */
+.problem { background: var(--ink); color: var(--white); }
+.problem .section-label { color: var(--ink-muted); }
+.problem .section-title { color: var(--white); }
+.problem .section-desc { color: rgba(255,255,255,0.5); }
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.problem-card {
+  padding: 2.5rem 2rem;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.3s;
+}
+.problem-card:first-child { border-left: none; }
+.problem-card:hover { background: rgba(255,255,255,0.03); }
+
+.problem-card .num {
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+.problem-card h4 {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  margin-bottom: 0.8rem;
+  color: var(--white);
+  font-weight: 400;
+  line-height: 1.3;
+}
+.problem-card p {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+/* ========== SERVICES ========== */
+.services { background: var(--white); }
+
+.services-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.service-card {
+  background: var(--white);
+  padding: 3rem 2.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.service-card:hover { background: var(--off-white); }
+
+.service-card.featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+}
+
+.service-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+}
+
+.service-num {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink-muted);
+  margin-bottom: 1rem;
+  font-weight: 400;
+}
+
+.service-card h3 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  margin-bottom: 0.3rem;
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.service-card .subtitle {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  font-style: italic;
+  margin-bottom: 1.2rem;
+}
+
+.service-card p.desc {
+  font-size: 0.9rem;
+  color: var(--ink-light);
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+.service-card ul {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.service-card ul li {
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  padding: 0.3rem 0;
+  padding-left: 1.2rem;
+  position: relative;
+  font-weight: 300;
+}
+.service-card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.75rem;
+  width: 6px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.service-price {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.service-price .amount {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  color: var(--ink);
+  font-weight: 400;
+}
+.service-price .per {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  font-weight: 300;
+}
+.service-price .idr {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  margin-top: 0.15rem;
+  font-weight: 300;
+}
+.service-price .note {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  font-style: italic;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ========== PROCESS ========== */
+.process { background: var(--off-white); }
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
+.step {
+  padding: 2rem;
+  border-right: 1px solid var(--border);
+}
+.step:last-child { border-right: none; }
+
+.step-number {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 1.2rem;
+}
+
+.step h4 {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.step p {
+  font-size: 0.88rem;
+  color: var(--ink-light);
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+/* ========== ABOUT ========== */
+.about { background: var(--white); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 0.45fr 0.55fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.about-visual {
+  aspect-ratio: 3/4;
+  background: var(--off-white);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-initials {
+  font-family: var(--serif);
+  font-size: 12rem;
+  color: var(--ink);
+  opacity: 0.04;
+  line-height: 0.8;
+  position: absolute;
+  bottom: -0.5rem;
+  left: 1rem;
+}
+
+.about-accent-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 40%;
+  background: var(--accent);
+}
+
+.about-text {}
+.about-text h3 {
+  font-family: var(--serif);
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.15;
+}
+.about-text p {
+  font-size: 0.95rem;
+  color: var(--ink-light);
+  line-height: 1.9;
+  margin-bottom: 1.2rem;
+  font-weight: 300;
+}
+.about-text p em {
+  color: var(--ink-mid);
+  font-style: italic;
+}
+
+.credential-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+.credential-tag {
+  font-size: 0.72rem;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--border);
+  color: var(--ink-light);
+  letter-spacing: 0.05em;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+/* ========== CTA ========== */
+.cta {
+  background: var(--white);
+  text-align: center;
+  padding: 8rem 3rem;
+  position: relative;
+}
+.cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 80px;
+  background: var(--border);
+}
+.cta h2 {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: 1.2rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.cta h2 em { color: var(--accent); font-style: italic; }
+.cta p {
+  font-size: 1rem;
+  color: var(--ink-light);
+  max-width: 440px;
+  margin: 0 auto 3rem;
+  line-height: 1.85;
+  font-weight: 300;
+}
+.cta .btn-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--ink);
+  color: var(--white);
+  padding: 1rem 2.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: var(--sans);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+.cta .btn-wa:hover {
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+.cta .btn-wa svg { width: 18px; height: 18px; }
+.cta .free-note {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  margin-top: 1.2rem;
+  font-weight: 300;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 3rem;
+}
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-brand {
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.footer-brand span { color: var(--ink-muted); font-weight: 300; }
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a {
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 400;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--ink); }
+.footer-copy {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  font-weight: 300;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ========== MOBILE ========== */
+@media (max-width: 900px) {
+  .nav { padding: 1.2rem 1.5rem; }
+  .nav.scrolled { padding: 0.8rem 1.5rem; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(20px);
+    padding: 1.5rem;
+    gap: 1.2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  }
+
+  section { padding: 4rem 1.5rem; }
+  .hero { padding: 0 1.5rem 4rem; }
+  .hero-content { grid-template-columns: 1fr; gap: 2.5rem; padding-top: 7rem; }
+  .hero-right { padding-bottom: 0; }
+  .hero-stats { gap: 2rem; }
+  .divider { padding: 0 1.5rem; }
+
+  .problem-grid { grid-template-columns: 1fr 1fr; }
+  .problem-card { border-left: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+  .services-header { grid-template-columns: 1fr; gap: 1rem; }
+  .services-grid { grid-template-columns: 1fr; }
+
+  .process-grid { grid-template-columns: 1fr 1fr; }
+  .step { border-right: none; border-bottom: 1px solid var(--border); }
+
+  .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .about-visual { aspect-ratio: 16/9; }
+
+  .cta { padding: 5rem 1.5rem; }
+  .footer { padding: 2rem 1.5rem; }
+  .footer-inner { flex-direction: column; gap: 1.5rem; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .problem-grid { grid-template-columns: 1fr; }
+  .process-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: column; gap: 1.2rem; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">doh.atelier</a>
+  <div class="nav-links" id="navLinks">
+    <a href="#layanan" data-id="Layanan" data-en="Services">Layanan</a>
+    <a href="#proses" data-id="Proses" data-en="Process">Proses</a>
+    <a href="#tentang" data-id="Tentang" data-en="About">Tentang</a>
+    <div class="lang-toggle">
+      <button class="active" onclick="setLang('id')">ID</button>
+      <button onclick="setLang('en')">EN</button>
+    </div>
+    <a href="#kontak" class="nav-cta" data-id="Kontak" data-en="Contact">Kontak</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Architecture · Advisory · Visualization</p>
+      <h1 data-id="Bangun Rumah Impian di Indonesia Dengan Arsitek yang <em>Bisa Anda Percaya</em>" data-en="Build Your Dream Home in Indonesia With an Architect <em>You Can Trust</em>">Bangun Rumah Impian di Indonesia Dengan Arsitek yang <em>Bisa Anda Percaya</em></h1>
+    </div>
+    <div class="hero-right">
+      <p class="hero-sub" data-id="hero-sub" data-en="You work hard in Qatar. Your home project in Indonesia deserves senior architectural guidance — from someone who understands both worlds.">Anda bekerja keras di Qatar. Proyek rumah Anda di Indonesia layak mendapat pendampingan arsitektur senior — dari seseorang yang memahami kedua dunia.</p>
+      <div class="hero-actions">
+        <a href="#kontak" class="btn-primary">
+          <span data-id="Konsultasi Gratis" data-en="Free Consultation">Konsultasi Gratis</span> ↗
+        </a>
+        <a href="#layanan" class="btn-secondary">
+          <span data-id="Lihat Layanan" data-en="View Services">Lihat Layanan</span>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <h3>25+</h3>
+          <p data-id="Tahun Pengalaman" data-en="Years Experience">Tahun Pengalaman</p>
+        </div>
+        <div class="stat-item">
+          <h3>GCC</h3>
+          <p data-id="Standar Internasional" data-en="International Standard">Standar Internasional</p>
+        </div>
+        <div class="stat-item">
+          <h3>2</h3>
+          <p data-id="Negara, Satu Tim" data-en="Countries, One Team">Negara, Satu Tim</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div></div>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="container">
+    <p class="section-label reveal" data-id="Tantangan" data-en="The Challenge">Tantangan</p>
+    <h2 class="section-title reveal" data-id="Membangun dari jarak 6.000 km penuh risiko" data-en="Building from 6,000 km away is full of risks">Membangun dari jarak 6.000 km<br>penuh risiko</h2>
+    <p class="section-desc reveal" data-id="Tanpa pendampingan yang tepercaya, proyek rumah impian bisa menjadi sumber stres, bukan kebahagiaan." data-en="Without trusted guidance, your dream home project can become a source of stress rather than excitement.">Tanpa pendampingan yang tepercaya, proyek rumah impian bisa menjadi sumber stres, bukan kebahagiaan.</p>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="num">01</div>
+        <h4 data-id="Desain Tidak Sesuai" data-en="Design Doesn't Match">Desain Tidak Sesuai</h4>
+        <p data-id="Hasil arsitek tidak sesuai bayangan — dan Anda baru sadar setelah pembangunan dimulai." data-en="The architect's result doesn't match what you envisioned — and you only realize after construction has started.">Hasil arsitek tidak sesuai bayangan — dan Anda baru sadar setelah pembangunan dimulai.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="num">02</div>
+        <h4 data-id="Sulit Diawasi" data-en="Hard to Supervise">Sulit Diawasi</h4>
+        <p data-id="Kontraktor dan arsitek lokal sulit dikontrol dari jauh. Masalah kualitas baru ketahuan terlambat." data-en="Contractors and local architects are difficult to control remotely. Quality issues are discovered too late.">Kontraktor dan arsitek lokal sulit dikontrol dari jauh. Masalah kualitas baru ketahuan terlambat.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="num">03</div>
+        <h4 data-id="Budget Membengkak" data-en="Budget Overruns">Budget Membengkak</h4>
+        <p data-id="Tanpa perencanaan dan panduan material yang jelas, biaya melonjak 30-50% dari estimasi awal." data-en="Without clear planning and material guidance, costs balloon 30-50% above initial estimates.">Tanpa perencanaan dan panduan material yang jelas, biaya melonjak 30-50% dari estimasi awal.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="num">04</div>
+        <h4 data-id="Keputusan dari Jauh" data-en="Decisions From Afar">Keputusan dari Jauh</h4>
+        <p data-id="Keputusan penting dibuat lewat foto WhatsApp buram tanpa analisa profesional." data-en="Critical choices made over blurry WhatsApp photos without professional analysis.">Keputusan penting dibuat lewat foto WhatsApp buram tanpa analisa profesional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="layanan">
+  <div class="container">
+    <div class="services-header">
+      <div>
+        <p class="section-label reveal" data-id="Layanan" data-en="Services">Layanan</p>
+        <h2 class="section-title reveal" data-id="Satu tim. Satu pintu. Standar internasional." data-en="One team. One door. International standards.">Satu tim. Satu pintu.<br>Standar internasional.</h2>
+      </div>
+      <div>
+        <p class="section-desc reveal" style="margin-bottom:0" data-id="Empat paket layanan untuk profesional Indonesia di GCC yang ingin membangun dengan tenang." data-en="Four service packages designed for Indonesian professionals in the GCC who want to build with confidence.">Empat paket layanan untuk profesional Indonesia di GCC yang ingin membangun dengan tenang.</p>
+      </div>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <h3 data-id="Konsultasi Desain" data-en="Design Consultation">Konsultasi Desain</h3>
+        <p class="subtitle" data-id="Satu sesi, arah yang jelas" data-en="One session, clear direction">Satu sesi, arah yang jelas</p>
+        <p class="desc" data-id="Sesi video mendalam untuk membahas rencana, evaluasi desain, atau second opinion profesional sebelum keputusan besar." data-en="In-depth video session to review your plans, evaluate existing designs, or provide a professional second opinion before major decisions.">Sesi video mendalam untuk membahas rencana, evaluasi desain, atau second opinion profesional sebelum keputusan besar.</p>
+        <ul>
+          <li data-id="Video call 60–90 menit" data-en="60–90 min video call">Video call 60–90 menit</li>
+          <li data-id="Catatan terstruktur + rekomendasi aksi" data-en="Structured notes + action plan">Catatan terstruktur + rekomendasi aksi</li>
+          <li data-id="Review site, budget & desain" data-en="Site, budget & design review">Review site, budget & desain</li>
+        </ul>
+        <div class="service-price">
+          <span class="amount">QAR 750</span>
+          <span class="per" data-id="/ sesi" data-en="/ session"> / sesi</span>
+          <span class="idr">IDR 3.200.000</span>
+        </div>
+      </div>
+
+      <div class="service-card featured reveal">
+        <div class="service-badge" data-id="Paling Populer" data-en="Most Popular">Paling Populer</div>
+        <div class="service-num">02</div>
+        <h3 data-id="Strategi Pra-Desain" data-en="Pre-Design Strategy">Strategi Pra-Desain</h3>
+        <p class="subtitle" data-id="Fondasi lengkap sebelum mendesain" data-en="Complete foundation before you design">Fondasi lengkap sebelum mendesain</p>
+        <p class="desc" data-id="Paket pra-desain lengkap: analisa kebutuhan, referensi desain, brief arsitektur, panduan material, dan rekomendasi arsitek lokal." data-en="Comprehensive pre-design package: needs analysis, design references, written architecture brief, material guidance, and local architect recommendations.">Paket pra-desain lengkap: analisa kebutuhan, referensi desain, brief arsitektur, panduan material, dan rekomendasi arsitek lokal.</p>
+        <ul>
+          <li data-id="2–3 sesi konsultasi" data-en="2–3 consultation sessions">2–3 sesi konsultasi</li>
+          <li data-id="Dokumen Strategi Pra-Desain (15–25 halaman)" data-en="Pre-Design Strategy Document (15–25 pages)">Dokumen Strategi Pra-Desain (15–25 halaman)</li>
+          <li data-id="Mood board digital + panduan budget" data-en="Digital mood board + budget guidance">Mood board digital + panduan budget</li>
+        </ul>
+        <div class="service-price">
+          <span class="amount">QAR 2.500</span>
+          <span class="idr">IDR 10.500.000</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <h3 data-id="Visualisasi Konsep" data-en="Concept Visualization">Visualisasi Konsep</h3>
+        <p class="subtitle" data-id="Lihat rumah Anda sebelum dibangun" data-en="See your home before it's built">Lihat rumah Anda sebelum dibangun</p>
+        <p class="desc" data-id="Ubah brief Anda menjadi visual arsitektur yang jelas — dipandu mata arsitek, dipercepat 3D modelling dan teknologi AI." data-en="Transform your brief into clear architectural visuals — guided by an architect's eye, accelerated by AI technology.">Ubah brief Anda menjadi visual arsitektur yang jelas — dipandu mata arsitek, dipercepat teknologi AI.</p>
+        <ul>
+          <li data-id="3–5 visual konsep (eksterior/interior)" data-en="3–5 concept visuals (exterior/interior)">3–5 visual konsep (eksterior/interior)</li>
+          <li data-id="2 opsi gaya desain" data-en="2 design style options">2 opsi gaya desain</li>
+          <li data-id="Presentasi digital siap pakai" data-en="Presentation-ready digital pack">Presentasi digital siap pakai</li>
+        </ul>
+        <div class="service-price">
+          <span class="amount">QAR 3.500</span>
+          <span class="idr">IDR 14.800.000</span>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-badge" style="background: var(--ink);" data-id="Solusi Lengkap" data-en="Complete Solution">Solusi Lengkap</div>
+        <div class="service-num">04</div>
+        <h3 data-id="Layanan Arsitektur Lengkap" data-en="Full Architecture Service">Layanan Arsitektur Lengkap</h3>
+        <p class="subtitle" data-id="Satu tim, satu kontrak, konsep hingga selesai" data-en="One team, one contract, concept to completion">Satu tim, satu kontrak, konsep hingga selesai</p>
+        <p class="desc" data-id="Layanan arsitektur satu pintu: doh.atelier memimpin desain dan kendali mutu, arsitek lokal partner menangani AOR, engineering, gambar kerja, dan pengawasan lapangan." data-en="Complete architecture service: doh.atelier leads design and quality control, while our local partner architect handles AOR, engineering, drawings, and site supervision.">Layanan arsitektur satu pintu: doh.atelier memimpin desain dan kendali mutu, arsitek lokal partner menangani AOR, engineering, gambar kerja, dan pengawasan lapangan.</p>
+        <ul>
+          <li data-id="doh.atelier: desain, visualisasi, kendali mutu" data-en="doh.atelier: design, visualization, quality control">doh.atelier: desain, visualisasi, kendali mutu</li>
+          <li data-id="Partner lokal: AOR, engineering, DED, pengawasan" data-en="Local partner: AOR, engineering, DED, site supervision">Partner lokal: AOR, engineering, DED, pengawasan</li>
+          <li data-id="Laporan bulanan + WhatsApp prioritas" data-en="Monthly progress reports + priority WhatsApp">Laporan bulanan + WhatsApp prioritas</li>
+        </ul>
+        <div class="service-price">
+          <span class="amount">QAR 1.500</span>
+          <span class="per" data-id="/ bulan" data-en="/ month"> / bulan</span>
+          <span class="idr">IDR 6.300.000 <span data-id="/bulan" data-en="/month">/bulan</span></span>
+          <span class="note" data-id="Biaya arsitek lokal dihitung terpisah, dikelola transparan melalui doh.atelier. Min. 4 bulan." data-en="Local architect fees calculated separately, managed transparently through doh.atelier. Min. 4 months.">Biaya arsitek lokal dihitung terpisah, dikelola transparan melalui doh.atelier. Min. 4 bulan.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="proses">
+  <div class="container">
+    <p class="section-label reveal" data-id="Cara Kerja" data-en="How It Works">Cara Kerja</p>
+    <h2 class="section-title reveal" style="margin-bottom: 3rem;" data-id="Empat langkah mudah" data-en="Four simple steps">Empat langkah mudah</h2>
+    <div class="process-grid">
+      <div class="step reveal">
+        <div class="step-number">Step 01</div>
+        <h4 data-id="Hubungi via WhatsApp" data-en="Message via WhatsApp">Hubungi via WhatsApp</h4>
+        <p data-id="Ceritakan rencana Anda secara singkat. Tidak perlu formal — cukup kirim pesan." data-en="Tell us briefly about your plans. No formalities needed — just send a message.">Ceritakan rencana Anda secara singkat. Tidak perlu formal — cukup kirim pesan.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-number">Step 02</div>
+        <h4 data-id="Konsultasi Awal Gratis" data-en="Free Intro Call (15 min)">Konsultasi Awal Gratis</h4>
+        <p data-id="Video call singkat 15 menit untuk memahami kebutuhan dan merekomendasikan paket yang tepat." data-en="A quick 15-minute video call to understand your needs and recommend the right package.">Video call singkat 15 menit untuk memahami kebutuhan dan merekomendasikan paket yang tepat.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-number">Step 03</div>
+        <h4 data-id="Mulai Bekerja" data-en="We Start Working">Mulai Bekerja</h4>
+        <p data-id="Setelah konfirmasi, sesi dijadwalkan dan pekerjaan dimulai sesuai timeline." data-en="After confirmation, sessions are scheduled and work begins according to the package timeline.">Setelah konfirmasi, sesi dijadwalkan dan pekerjaan dimulai sesuai timeline.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-number">Step 04</div>
+        <h4 data-id="Deliverable Dikirim" data-en="Deliverables Sent">Deliverable Dikirim</h4>
+        <p data-id="Semua hasil dikirim digital via email atau WhatsApp. Jelas, terstruktur, actionable." data-en="All results delivered digitally via email or WhatsApp. Clear, structured, actionable.">Semua hasil dikirim digital via email atau WhatsApp. Jelas, terstruktur, actionable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="tentang">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-accent-bar"></div>
+        <div class="about-initials">HJ</div>
+      </div>
+      <div class="about-text reveal">
+        <p class="section-label" data-id="Tentang" data-en="About">Tentang</p>
+        <h3 data-id="Arsitek Senior. Dua Dunia. Satu Standar." data-en="Senior Architect. Two Worlds. One Standard.">Arsitek Senior.<br>Dua Dunia.<br>Satu Standar.</h3>
+        <p data-id="doh.atelier didirikan oleh Heriadi Joewono (Dodo), arsitek senior dengan pengalaman lebih dari 25 tahun di arsitektur, manajemen desain, dan pengawasan proyek — termasuk proyek berskala besar di Qatar dan kawasan Teluk." data-en="doh.atelier was founded by Heriadi Joewono (Dodo), a senior architect with over 25 years of experience in architecture, design management, and project oversight — including large-scale projects in Qatar and the Gulf region.">doh.atelier didirikan oleh Heriadi Joewono (Dodo), arsitek senior dengan pengalaman lebih dari 25 tahun di arsitektur, manajemen desain, dan pengawasan proyek — termasuk proyek berskala besar di Qatar dan kawasan Teluk.</p>
+        <p data-id="Dengan pengalaman di lingkungan Qatar Foundation, ASTAD, dan ekosistem manajemen proyek internasional, Dodo memadukan disiplin teknis standar dunia dengan kepekaan desain dan pemahaman mendalam tentang konteks pembangunan Indonesia." data-en="With experience in the Qatar Foundation, ASTAD, and international project management ecosystem, Dodo combines world-class technical discipline with design sensitivity and deep understanding of Indonesian construction context.">Dengan pengalaman di lingkungan Qatar Foundation, ASTAD, dan ekosistem manajemen proyek internasional, Dodo memadukan disiplin teknis standar dunia dengan kepekaan desain dan pemahaman mendalam tentang konteks pembangunan Indonesia.</p>
+        <p><em data-id="doh.atelier bukan biro arsitektur besar. Ini adalah praktik personal yang mengutamakan kualitas, kejujuran, dan perhatian pada setiap detail — karena rumah Anda layak mendapat arsitek yang benar-benar peduli." data-en="doh.atelier is not a large architecture bureau. It's a personal practice that prioritizes quality, honesty, and attention to every detail — because your home deserves an architect who truly cares.">doh.atelier bukan biro arsitektur besar. Ini adalah praktik personal yang mengutamakan kualitas, kejujuran, dan perhatian pada setiap detail — karena rumah Anda layak mendapat arsitek yang benar-benar peduli.</em></p>
+        <div class="credential-tags">
+          <span class="credential-tag">Architecture</span>
+          <span class="credential-tag">Design Management</span>
+          <span class="credential-tag">Project Management</span>
+          <span class="credential-tag">Owner Representation</span>
+          <span class="credential-tag">Code Review</span>
+          <span class="credential-tag">Qatar / GCC</span>
+          <span class="credential-tag">Indonesia</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="kontak">
+  <div class="container">
+    <h2 data-id="Siap Membangun dengan <em>Tenang?</em>" data-en="Ready to Build with <em>Confidence?</em>">Siap Membangun dengan <em>Tenang?</em></h2>
+    <p data-id="Ceritakan rencana Anda. Konsultasi awal 15 menit gratis — tanpa komitmen, hanya masukan arsitektur yang jujur." data-en="Tell us about your plans. The first 15-minute consultation is free — no commitment, just honest architectural advice.">Ceritakan rencana Anda. Konsultasi awal 15 menit gratis — tanpa komitmen, hanya masukan arsitektur yang jujur.</p>
+    <a href="https://wa.me/97455575622?text=Halo%20doh.atelier%2C%20saya%20tertarik%20konsultasi%20untuk%20rencana%20rumah%20di%20Indonesia." class="btn-wa">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span data-id="Chat via WhatsApp" data-en="Chat on WhatsApp">Chat via WhatsApp</span>
+    </a>
+    <span class="free-note" data-id="Konsultasi awal 15 menit gratis" data-en="First 15-minute consultation is free">Konsultasi awal 15 menit gratis</span>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">doh.atelier <span>— Doha, Qatar · Indonesia</span></div>
+    <div class="footer-links">
+      <a href="#layanan" data-id="Layanan" data-en="Services">Layanan</a>
+      <a href="#tentang" data-id="Tentang" data-en="About">Tentang</a>
+      <a href="#kontak" data-id="Kontak" data-en="Contact">Kontak</a>
+    </div>
+    <span class="footer-copy">© 2026 doh.atelier</span>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+let currentLang = 'id';
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-toggle button').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === lang.toUpperCase());
+  });
+  document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+    const text = el.getAttribute('data-' + lang);
+    if (text) el.innerHTML = text;
+  });
+}
+</script>
+
+</body>
+</html>
